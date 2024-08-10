@@ -1,22 +1,32 @@
 const Tag = require('../models/Tag');
+const Restaurant = require('../models/Restaurant');
 
 const getTags = async (req, res) => {
   try {
     const tags = await Tag.find();
     
-    const response = {
-      tags
-    };
-
-    res.json(response);
+    res.json(tags);
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-const getTagById = async (req, res) => {
-    res.json(req.tag);
+const getRestaurantByTagName = async (req, res) => {
+    const tag = req.tag;
+    
+    try {
+       const restaurants = await Restaurant.find({ 'tags': tag._id })
+       .populate('location.city')
+       .populate('tags')
+       .populate('reviews')
+       .exec();
+       
+       return res.json(restaurants);
+   } catch (error) {
+       return res.status(500).json({ message: error.message });
+   }
 };
+
 
 const createTag = async (req, res) => {
     const { tag_name } = req.body;
@@ -33,4 +43,4 @@ const createTag = async (req, res) => {
     }
 };
 
-module.exports = { getTags, getTagById, createTag };
+module.exports = { getTags, getRestaurantByTagName, createTag };

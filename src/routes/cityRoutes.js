@@ -1,12 +1,12 @@
 const express = require('express');
-const { getCities, getCityByName, createCity } = require('../controllers/cityController');
+const { getCities, getRestaurantsByCityName, createCity } = require('../controllers/cityController');
 const checkCityExists = require('../middlewares/checkCity');
 
 const cityRoutes = express.Router();
 
 cityRoutes.get('/', getCities);
 
-cityRoutes.get('/:name', checkCityExists, getCityByName);
+cityRoutes.get('/:name', checkCityExists, getRestaurantsByCityName);
 
 cityRoutes.post('/', createCity);
 
