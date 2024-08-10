@@ -1,11 +1,13 @@
 const express = require('express');
 const connectDB = require('./config/db');
+const cors = require('cors');
 require('dotenv').config();
 const restaurantRoutes = require('./routes/restaurantRoutes');
 const tagRoutes = require('./routes/tagRoutes');
 const cityRoutes = require('./routes/cityRoutes');
 
 const app = express();
+app.use(cors());
 
 connectDB();
 
