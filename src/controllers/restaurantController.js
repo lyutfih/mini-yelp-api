@@ -5,77 +5,32 @@ const Tag = require('../models/Tag');
 
 const getRestaurants = async (req, res) => {
     try {
-        const restaurants = await Restaurant.find()
-            .populate('location.city')
-            .populate('tags')
-            .exec();
+    const restaurants = await Restaurant.find()
+      .populate('location.city')
+      .populate('tags')
+      .populate('reviews')
+      .exec();
 
-        const restaurantPromises = restaurants.map(async (restaurant) => {
-            const comments = await Comment.find({ restaurant: restaurant.id }).exec();
-
-            return {
-                id: restaurant._id.toString(),
-                name: restaurant.name,
-                image_URL: restaurant.image_URL,
-                location: {
-                    address: restaurant.location.address,
-                    city: restaurant.location.city.city_name,
-                    state: restaurant.location.city.state,
-                    zip_code: restaurant.location.city.zip_code
-                },
-                tags: restaurant.tags.map(tag => tag.tag_name),
-                rating: restaurant.rating,
-                reviews: comments.map(comment => ({
-                    id: comment._id.toString(),
-                    user_id: comment.user_id,
-                    text: comment.text,
-                    rating: comment.rating
-                }))
-            };
-        });
-
-        const restaurantsWithReviews = await Promise.all(restaurantPromises);
-
-        return res.json(restaurantsWithReviews);
-    } catch (err) {
-        return res.status(500).json({ message: err.message });
-    }
+    return res.json(restaurants);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
 }
 
 const getRestaurantById = async (req, res) => {
     const restauranId = req.params.id;
     try {
         const restaurant = await Restaurant.findById(restauranId)
-            .populate('location.city')
-            .populate('tags')
-            .exec();
+        .populate('location.city')
+        .populate('tags')
+        .populate('reviews')
+        .exec();
 
         if (!restaurant) {
             return res.status(404).json({ message: 'Restaurant not found' });
         }
 
-        const comments = await Comment.find({ restaurant: restaurant._id }).exec();
-
-        const restaurantWithReviews = {
-            id: restaurant._id.toString(),
-            name: restaurant.name,
-            image_URL: restaurant.image_URL,
-            location: {
-                address: restaurant.location.address,
-                city: restaurant.location.city.city_name,
-                state: restaurant.location.city.state,
-                zip_code: restaurant.location.city.zip_code
-            },
-            tags: restaurant.tags.map(tag => tag.tag_name),
-            rating: restaurant.rating,
-            reviews: comments.map(comment => ({
-                id: comment._id.toString(),
-                user_id: comment.user_id,
-                text: comment.text,
-                rating: comment.rating
-            }))
-        };
-        return res.json(restaurantWithReviews);
+        return res.json(restaurant);
     } catch (error) {
         return res.status(500).json({ message: err.message });
     }
