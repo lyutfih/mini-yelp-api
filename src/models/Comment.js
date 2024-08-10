@@ -1,0 +1,10 @@
+const mongoose = require('mongoose');
+
+const CommentSchema = new mongoose.Schema({
+  restaurant: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
+  user_id: String,
+  text: String,
+  rating: Number
+});
+
+module.exports = mongoose.model('Comment', CommentSchema);
