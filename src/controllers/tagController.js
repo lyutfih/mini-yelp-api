@@ -19,14 +19,18 @@ const getTagById = async (req, res) => {
 };
 
 const createTag = async (req, res) => {
-  try {
     const { tag_name } = req.body;
-    const tag = new Tag({ tag_name });
-    await tag.save();
-    res.json(tag);
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
+  
+    if (!tag_name) {
+      return res.status(400).json({ error: 'All fields are required.' });
+    }
+    
+    try {
+      const tag = await Tag.create({ tag_name });
+      res.status(201).json(tag);
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
 };
 
 module.exports = { getTags, getTagById, createTag };

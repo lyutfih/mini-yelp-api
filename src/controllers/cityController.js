@@ -19,11 +19,15 @@ const getCityByName = async (req, res) => {
 };
 
 const createCity = async (req, res) => {
-  try {
-    const { city_name,state,zip_code } = req.body;
-    const city = new City({ city_name,state,zip_code });
-    await city.save();
-    res.json(city);
+    const { city_name, state, zip_code } = req.body;
+
+    if (!city_name || !state || !zip_code) {
+      return res.status(400).json({ error: 'All fields are required.' });
+    }
+  
+    try {
+      const city = await City.create({ city_name, state, zip_code });
+      res.status(201).json(city);
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
