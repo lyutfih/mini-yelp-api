@@ -10,6 +10,33 @@ const app = express();
 connectDB();
 
 app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Fullscreen Iframe</title>
+        <style>
+          html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+          }
+          iframe {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+          }
+        </style>
+      </head>
+      <body>
+        <iframe src="https://mini-yelp-docs.vercel.app/" allowfullscreen></iframe>
+      </body>
+    </html>
+  `);
+});
+
 app.use('/api/restaurants', restaurantRoutes);
 app.use('/api/tags', tagRoutes);
 app.use('/api/cities', cityRoutes);
