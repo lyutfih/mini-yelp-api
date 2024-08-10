@@ -11,4 +11,18 @@ const RestaurantSchema = new mongoose.Schema({
   rating: Number
 });
 
+RestaurantSchema.set('toJSON', {
+    transform: (doc, ret) => {
+      delete ret.__v;
+      return ret;
+    }
+  });
+  
+RestaurantSchema.set('toObject', {
+    transform: (doc, ret) => {
+      delete ret.__v;
+      return ret;
+    }
+  });
+
 module.exports = mongoose.model('Restaurant', RestaurantSchema);
