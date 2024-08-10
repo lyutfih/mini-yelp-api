@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
     <!DOCTYPE html>
     <html>
       <head>
-        <title>Fullscreen Iframe</title>
+        <title>Documentation - Mini Yelp</title>
         <style>
           html, body {
             height: 100%;
