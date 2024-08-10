@@ -10,7 +10,7 @@ const app = express();
 connectDB();
 
 app.use(express.json());
-// app.use('/api/restaurants', restaurantRoutes);
+app.use('/api/restaurants', restaurantRoutes);
 app.use('/api/tags', tagRoutes);
 app.use('/api/cities', cityRoutes);
 
